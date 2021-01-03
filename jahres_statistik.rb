@@ -59,7 +59,7 @@ shows = @schedule[:data].map {|a| a[:elements] }.flatten.reject {|s| s[:type] ==
 bohnenlos = shows.select {|s| s[:bohnen].empty? }
 
 denzel = bohnenlos.select {|s| s[:title].include? 'Zocken mit Denzel' }
-denzel.each {|s| s[:bohnen] = [ {name: 'Dennis'} ] }
+denzel.each {|s| s[:bohnen] = [ { name: 'Dennis', mgmtid: 11 } ] }
 
 def add_bohne string, names, shows
   neue_bohnen = names.map {|name| { name: name } }
@@ -90,6 +90,23 @@ add_bohne('mit Simon und Budi', ['Simon', 'Budi'], bohnenlos)
 def normalize_show show
   # Folgennummer aus Titel entfernen
   show[:title] = show[:title].gsub(/#?\d*$/, '').strip
+
+  # nicht eindeutige Bohnen auflösen
+  show[:bohnen].each {|bohne|
+    case bohne[:mgmtid]
+    when  11; bohne[:name] = 'Dennis Richtarski'
+    when  12; bohne[:name] = 'Dennis Heinrichs'
+    when  34; bohne[:name] = 'Steffen Grziwa'
+    when  35; bohne[:name] = 'Steffen Meier'
+    when  67; bohne[:name] = 'Fabian Käufer'
+    when  82; bohne[:name] = 'Fabian Krane'
+    when 115; bohne[:name] = 'Tobias Escher'
+    when 118; bohne[:name] = 'Tobias Schwarz'
+    when 159; bohne[:name] = 'Martin Mueller'
+    when 175; bohne[:name] = 'Martin Bärsch'
+    end
+  }
+
   show
 end
 
