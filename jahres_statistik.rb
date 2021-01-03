@@ -99,11 +99,17 @@ bohnen_shows.each {|s| normalize_show(s) }
 
 total_bohnen_shows = bohnen_shows.map {|s| s[:duration] }.sum
 
-puts "#{shows.count} Sendungen, davon"
-puts "#{bohnen_shows.count} mit Bohnen (#{percentage(bohnen_shows.count, shows.count)}) und"
-puts "#{bohnenlos.count} Sendungen als Drittcontent (#{percentage(bohnenlos.count, shows.count)}) ohne Bohnenbeteiligung."
+bohnen_shows_live = bohnen_shows.select {|s| s[:type] == 'live' }
+bohnen_shows_premiere = bohnen_shows.select {|s| s[:type] == 'premiere' }
+
+puts "Gesamthaft hat RTBV #{shows.count} Sendungen mit neuem Content gesendet, davon"
+puts "waren #{bohnen_shows.count} mit Bohnen (#{percentage(bohnen_shows.count, shows.count)}) und"
+puts "#{bohnenlos.count} Sendungen Drittcontent (#{percentage(bohnenlos.count, shows.count)}), also ohne Bohnenbeteiligung."
 puts
-puts "Gesamthaft wurde letztes Jahr neuer Content für #{seconds_to_days(total_bohnen_shows)} am Stück gesendet."
+puts "Insgesamt wurde letztes Jahr neuer RBTV-Content für #{seconds_to_days(total_bohnen_shows)},"
+puts "wenn man ihn am Stück schauen würde, gesendet (ohne Drittcontent)."
+puts "Davon waren #{bohnen_shows_live.count} Sendungen live, mit einer Gesamtlaufzeit von #{seconds_to_days(bohnen_shows_live.sum {|s| s[:duration] })}n."
+puts "Premieren waren #{bohnen_shows_premiere.count} Sendungen, mit einer Laufzeit von #{seconds_to_days(bohnen_shows_premiere.sum {|s| s[:duration] })}n."
 puts
 puts "Die folgenden Prozentzahlen sind immer relativ zu den Bohnen-Sendungen ohne Drittcontent."
 
